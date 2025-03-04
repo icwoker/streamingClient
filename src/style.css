@@ -1,4 +1,4 @@
-:root {
+/* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -76,4 +76,16 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+} */
+
+@import "tailwindcss";
+
+/* 使用 @apply 提取通用样式 */
+.common-button {
+  @apply p-4 rounded-2xl cursor-pointer text-white duration-300 ease-in ml-4;
+}
+
+body {
+  margin: 0;
+  padding: 0;
 }

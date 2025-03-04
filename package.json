@@ -9,13 +9,29 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.5.13"
+    "@primevue/themes": "^4.2.5",
+    "@tailwindcss/vite": "^4.0.7",
+    "axios": "^1.7.9",
+    "lottie-web": "^5.12.2",
+    "mpegts.js": "^1.8.0",
+    "pinia": "^3.0.1",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.2.5",
+    "socket.io-client": "^4.8.1",
+    "tailwindcss": "^4.0.7",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
-    "typescript": "~5.6.2",
-    "vite": "^6.0.5",
-    "vue-tsc": "^2.2.0"
+    "typescript": "~5.6.3",
+    "vite": "^6.1.1",
+    "vue-tsc": "^2.2.2"
+  },
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }
