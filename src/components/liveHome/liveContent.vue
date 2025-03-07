@@ -18,8 +18,8 @@
             <div>
               <div class="flex items-center gap-3">
                 <h1 class="text-xl font-bold">{{ liveInfo.liver_name }}</h1>
-                <button class="bg-pink-500 hover:bg-pink-600 px-4 py-1 rounded-full text-sm">
-                  关注
+                <button class="bg-pink-500 hover:bg-pink-600 px-4 py-1 rounded-full text-sm cursor-pointer  hover:scale-105 transition-all duration-300" @click="handleFollow">
+                  {{ isFollow ? '取关' : '关注' }}
                 </button>
               </div>
                 <p class="text-gray-400 mt-1">{{ liveInfo.title }}</p>
@@ -79,6 +79,7 @@
   import { useUserStore } from '@/store/user';
   import axios from '@/API/axios';
   import { apiBaseUrl } from '@/env/ApiConfig';
+  import { followUser, checkFollowStatus, unfollowUser } from '@/API/follow';
   
   const route = useRoute();
   const liveStore = useLiveStore();
@@ -114,11 +115,11 @@
     try {
       const roomId = route.params.id;
       console.log(`直播的房间id:${roomId}`);
-  
       const res = await axios.get(`/livehome/get_live_by_id/${roomId}`);
       const data = res.data;
       liveInfo.value = data.data as LiveInfo;
       console.log(liveInfo.value);
+      await checkStatus();
       emit('sendLiverId',liveInfo.value.liver_id);
       // 确保在获取到直播信息后再初始化播放器
       if (mpegts.getFeatureList().mseLivePlayback) {
@@ -151,6 +152,28 @@
       console.error('获取直播信息失败:', error);
     }
   });
+  const isFollow = ref(false);
+  const checkStatus = async ()=>{
+    const res = await checkFollowStatus(parseInt(liveInfo.value.liver_id));
+    if(res.data.is_following){
+      isFollow.value = true;
+    }else{
+      isFollow.value = false;
+    }
+  }
+  const handleFollow = async ()=>{
+
+    if(isFollow.value){
+      await unfollowUser(parseInt(liveInfo.value.liver_id));
+      isFollow.value = false;
+      alert('取关成功');
+    }else{
+      await followUser(parseInt(liveInfo.value.liver_id));
+      isFollow.value = true;
+      alert('关注成功');
+    }
+  }
+
   </script>
   
   <style scoped>

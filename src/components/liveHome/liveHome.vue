@@ -207,9 +207,9 @@ onMounted(async () => {
 .effect-container {
     position: absolute;
     width: 100%;
-    min-height: 80vh;
+    min-height: 65vh;
     z-index: 100;
-    top: 12vh;
+    top: 30vh;
     left: 0;
     display: flex;
     /* background-color: rgba(0, 0, 0, 0.5); */
