@@ -30,12 +30,13 @@ export const recharge = async(amount:number):Promise<RechargeResult> =>{
 }
 
 //送礼物
-export const sendGift = async(amount:number,description:string,liverId:string)=>{
+export const sendGift = async(gift_id:number,quantity:number,receiver_id:number,live_id:string)=>{
     try{
         const response = await axios.post('/transaction/give_gift',{
-            amount:amount,
-            description:description,
-            liver_id:liverId
+            gift_id:gift_id,
+            quantity:quantity,      
+            receiver_id:receiver_id,
+            live_id:live_id
         })
         return response;
     }catch(error){

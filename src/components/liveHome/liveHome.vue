@@ -2,8 +2,8 @@
     <div>
         <Nav />
         <div class="content">
-            <div class="effect-container" :style="{ justifyContent: startPosition }">
-                <Effect v-if="isEffect" :style="{ width: giftWidth + '%' }" :animationPath="animationPath" :loop="true"
+            <div class="effect-container"  v-if="isEffect"  :style="{ justifyContent: startPosition }">
+                <Effect  :style="{ width: giftWidth + '%' }" :animationPath="animationPath" :loop="true"
                     :autoplay="true" :moveMode="moveMode" />
             </div>
             <div class="live-content">
@@ -40,6 +40,7 @@ import RechargeDialog from "./RechargeDialog.vue";
 import type { RechargeResult } from '@/API/transaction/types';
 import { useUserStore } from '@/store/user'
 import { sendGift } from '@/API/transaction';
+import { getChatMessage } from '@/API/chatMessage';
 
 const userStore = useUserStore();
 
@@ -63,6 +64,7 @@ onUnmounted(() => {
 })
 
 interface Gift {
+    id: number;
     title: string;
     money: number;
     animationPath: string;
@@ -96,13 +98,12 @@ const sendGifts = async (gift: Gift) => {
     if (!isEffect.value) {
 
         // 调用后端接口发送礼物
-        const result = await sendGift(gift.money, gift.title, liverId.value);
+        const result = await sendGift(gift.id,1,+liverId.value,id);
         if (result.status === 200) {
             // 通知后端礼物发送成功
             try {
                 socketService.sendGift_Socket({ giftName: gift.title, giftCount: 1 });
                 currentGift.value = gift; // 更新当前礼物信息
-
             } catch (error) {
                 console.log('发送礼物失败', error);
             }
@@ -137,6 +138,8 @@ onMounted(async () => {
     const userId = response.data.user_id;
     console.log(userId);
     socketService.connect(userId, id)
+    const old_messages = await getChatMessage(id);
+    messages.value = old_messages.data.data;
     //监听接收到的弹幕消息
     socketService.onReceiveDanmu((data) => {
         const newMessage = data.message;

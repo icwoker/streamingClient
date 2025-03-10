@@ -28,6 +28,7 @@ const balance = computed(()=>{
 
 const gifList = ref([
     {
+        id:1,
         title: '豪华超跑',
         money: 200,
         animationPath: '/public/lottie/car.json',
@@ -37,6 +38,7 @@ const gifList = ref([
         start_position:'left',
     },
     {
+        id:2,
         title: '告白气球', 
         money: 300,
         animationPath: '/public/lottie/hotAirBalloon.json',
@@ -46,6 +48,7 @@ const gifList = ref([
         start_position:'left',
     },
     {
+        id:3,
         title: '冲天火箭', 
         money: 300,
         animationPath: '/public/lottie/rocket.json',
@@ -55,6 +58,7 @@ const gifList = ref([
         start_position:'center',
     },
     {
+        id:4,
         title: '七彩彩虹', 
         money: 200,
         animationPath: '/public/lottie/rainbow.json',
@@ -64,6 +68,7 @@ const gifList = ref([
         start_position:'left',
     },
     {
+        id:5,
         title: '绚丽烟花', 
         money: 300,
         animationPath: '/public/lottie/firework.json',
@@ -73,6 +78,7 @@ const gifList = ref([
         start_position:'left',
     },
     {
+        id:6,
         title: '星耀王冠', 
         money: 100,
         animationPath: '/public/lottie/king.json',
@@ -82,6 +88,7 @@ const gifList = ref([
         start_position:'left',
     },
     {
+        id:7,
         title: '牛气冲天', 
         money: 30,
         animationPath: '/public/lottie/cow.json',
@@ -91,6 +98,7 @@ const gifList = ref([
         start_position:'left',
     },
     {
+        id:8,
         title: '浪漫玫瑰', 
         money: 10,
         animationPath: '/public/lottie/rose.json',
@@ -100,6 +108,7 @@ const gifList = ref([
         start_position:'center',
     },
     {
+        id:9,
         title: '甜蜜情书',
         money: 20,
         animationPath: '/public/lottie/love-message.json',
@@ -109,6 +118,7 @@ const gifList = ref([
         start_position:'center',
     },
     {
+        id:10,
         title: '比心爱你', 
         money: 50,
         animationPath: '/public/lottie/hand-love.json',

@@ -32,7 +32,7 @@
       <div class="flex-1 overflow-y-auto" ref="chatContainer">
         <div class="p-3 space-y-4 max-h-[450px] overflow-y-auto">
           <div v-for="message in props.messages as any[]" :key="message.id" class="flex gap-2">
-            <img :src="message.avatar" alt="用户头像" class="w-8 h-8 rounded-full flex-shrink-0" />
+            <img :src="checkAvatar(message.avatar)" alt="用户头像" class="w-8 h-8 rounded-full flex-shrink-0" />
             <div>
               <div class="flex items-center gap-2">
                 <span class="text-sm" :class="message.isAdmin ? 'text-pink-500' : 'text-white'">
@@ -208,6 +208,14 @@ watch(()=>props.messages,()=>{
     }
   })
 
+  const checkAvatar = (avatar:string)=>{
+    //检查有没有携带apiBaseUrl
+    if(avatar.includes(apiBaseUrl)){
+      return avatar
+    }else{
+      return `${apiBaseUrl}/${avatar}`
+    }
+  }
  
   </script>
   
