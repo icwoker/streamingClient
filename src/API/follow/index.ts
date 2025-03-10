@@ -1,5 +1,5 @@
 import axios from '@/API/axios'
-import { getFollowerCount, followerType, followData, followStatus } from './types'
+import { getFollowerCount, followerType, followData, followStatus, fanData, fanType } from './types'
 
 
 //获取粉丝数和关注数
@@ -27,5 +27,5 @@ export const getFollowList = (params: {page: number, per_page: number}) =>{
 
 //获取粉丝列表
 export const getFollowerList = (params: {page: number, per_page: number}) =>{
-    return axios.get<followData>('/follow/get_my_fans', {params})
+    return axios.get<fanData>('/follow/get_my_fans', {params})
 }

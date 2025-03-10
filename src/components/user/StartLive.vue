@@ -121,7 +121,8 @@ const checkLive = async () => {
   try {
     const res = await axios.get('/livehome/check_live');
     const status = res.data.status;
-    if (status) {
+
+    if (status == 'live') {
       //如果后端返回当前用户已经在直播中，则将liveStart设置为true
       liveStart.value = true;
       liveStore.roomId = res.data.stream_key;
@@ -144,7 +145,7 @@ const checkLive = async () => {
 
 onMounted(async () => {
   //检查是否已经开启直播，如果开启了，直接显示后面的，不用再填写直播信息
-  // await checkLive();
+  await checkLive();
 })
 </script>
 

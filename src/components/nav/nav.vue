@@ -74,13 +74,13 @@
               <i class="pi pi-user mr-2"></i>我的直播间
             </a>
             <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-200">
-              <i class="pi pi-trophy mr-2"></i>成就中心
+              <i class="pi pi-trophy mr-2"></i>我的关注
             </a>
             <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-200">
-              <i class="pi pi-envelope mr-2"></i>消息中心
+              <i class="pi pi-envelope mr-2"></i>粉丝中心
             </a>
             <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-200">
-              <i class="pi pi-home mr-2"></i>主站空间
+              <i class="pi pi-home mr-2"></i>小黑屋
             </a>
             <a href="#" @click="logout" class="block px-4 py-2 hover:bg-gray-200 text-red-500">
               <i class="pi pi-sign-out mr-2"></i>

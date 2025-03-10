@@ -67,6 +67,7 @@ import InfoShow from "@/components/part/infoshow.vue";
 import axios from "@/API/axios";
 import { apiBaseUrl } from "@/env/ApiConfig";
 import { useUserStore } from "@/store/user";
+import { getFollowStats } from "@/API/follow";
 const userStore = useUserStore();
 import { ref, onMounted } from "vue";
 const value = ref("");
@@ -91,6 +92,9 @@ onMounted(async () => {
     userStore.setUserId(userInfo.user_id);
     userStore.setUsername(userInfo.user_name);
     userStore.setAvatar(userInfo.avatar_url);
+    const follow_stats = await getFollowStats();
+    userStore.setFollowersCount(follow_stats.data.fans_count);
+    userStore.setFollowingCount(follow_stats.data.follows_count);
   }catch(error){
     console.log("获取用户信息失败",error);    
   }

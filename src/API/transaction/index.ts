@@ -43,3 +43,20 @@ export const sendGift = async(amount:number,description:string,liverId:string)=>
         throw error;
     }
 }
+
+
+//查询交易记录
+export const getTransactionList = async(page:number,page_size:number)=>{
+    try{
+        const response = await axios.get('/transaction/list',{
+            params:{
+                page:page,
+                page_size:page_size
+            }
+        })
+        return response.data;
+    }catch(error){
+        console.error('查询交易记录失败',error);
+        throw error;
+    }
+}

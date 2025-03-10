@@ -1,5 +1,6 @@
 
 import { defineStore } from 'pinia'
+import axios from '@/API/axios'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -8,16 +9,24 @@ export const useUserStore = defineStore('user', {
     balance: 0,
     followersCount: 0,
     followingCount: 0,
-    avatar: ''
+    avatar: '',
+    bio: '' 
   }),
   actions: {
+    async getUserInfo(){
+      const res = await axios.get('/auth/me');
+      this.userId = res.data.user_id;
+      this.username = res.data.user_name;
+      this.bio = res.data.bio;
+      this.avatar = res.data.avatar_url;
+    },
     updateBalance(amount) {
       this.balance += amount
     },
     setAvatar(avatar) {
       this.avatar = avatar
     },
-    getAvatar() {
+    async getAvatar() {
       return this.avatar
     },
     setUserId(id) {
