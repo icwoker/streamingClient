@@ -31,4 +31,9 @@ export const routes = [
     path: "/live",
     redirect: "/live/1",
   },
+  {
+    path: "/liveStatistics/:live_id",
+    name: "liveStatistics",
+    component: () => import("@/components/user/LiveStatistics.vue"),
+  },
 ];

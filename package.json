@@ -12,6 +12,7 @@
     "@primevue/themes": "^4.2.5",
     "@tailwindcss/vite": "^4.0.7",
     "axios": "^1.7.9",
+    "echarts": "^5.6.0",
     "lottie-web": "^5.12.2",
     "mpegts.js": "^1.8.0",
     "pinia": "^3.0.1",

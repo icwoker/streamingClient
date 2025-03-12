@@ -93,8 +93,8 @@ onMounted(async () => {
     userStore.setUsername(userInfo.user_name);
     userStore.setAvatar(userInfo.avatar_url);
     const follow_stats = await getFollowStats();
-    userStore.setFollowersCount(follow_stats.data.fans_count);
-    userStore.setFollowingCount(follow_stats.data.follows_count);
+    userStore.setFollowersCount(follow_stats.data.follows_count );
+    userStore.setFollowingCount(follow_stats.data.fans_count);
   }catch(error){
     console.log("获取用户信息失败",error);    
   }

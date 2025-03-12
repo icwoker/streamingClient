@@ -21,14 +21,14 @@
     <!-- 直播记录列表 -->
     <div v-else class="space-y-4">
       <div v-for="record in liveRecords" :key="record.id" 
-           class="flex flex-col md:flex-row border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+           class="flex flex-col md:flex-row border border-gray-200 rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition-shadow" @click="goToLiveStatistics(record.id)">
         <!-- 封面图 -->
         <div class="md:w-48 h-32 overflow-hidden">
             <img :src="`${apiBaseUrl}/${record.cover_url}`" :alt="record.title" class="w-full h-full object-cover">
         </div>
         
         <!-- 内容 -->
-        <div class="flex-1 p-4 flex flex-col justify-between">
+        <div class="flex-1 p-4 flex flex-col justify-between" >
           <div>
             <div class="flex justify-between items-start">
               <h3 class="text-lg font-semibold text-gray-800">{{ record.title }}</h3>
@@ -102,6 +102,8 @@ import { ref, computed, onMounted } from 'vue';
 import type { LiveRecord, PaginationData } from '@/types/live';
 import axios from '@/API/axios'
 import { apiBaseUrl } from '@/env/ApiConfig';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 // 组件属性
 const props = defineProps<{
@@ -228,4 +230,8 @@ const paginationArray = computed(() => {
 onMounted(() => {
   fetchLiveRecords();
 });
+
+const goToLiveStatistics = (live_id: string) => {
+  router.push(`/liveStatistics/${live_id}`);
+}
 </script>
