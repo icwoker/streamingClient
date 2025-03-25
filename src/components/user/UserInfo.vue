@@ -102,8 +102,14 @@ onMounted(async () => {
 })
 
 const handleAvatarChange = (event: Event) => {
+  const useful_suffix = ['png', 'jpg', 'jpeg', 'gif']
   const file = (event.target as HTMLInputElement).files?.[0];
   if (file) {
+    const file_suffix = file.name.split('.').pop()
+    if(!useful_suffix.includes(file_suffix)){
+      alert('请上传正确的图片格式')
+      return
+    }
     const formData = new FormData();
     formData.append('avatar', file);
     

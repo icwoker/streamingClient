@@ -19,11 +19,14 @@
       </div>
     </div>
   </div>
+  <Toast />
 </template>
 
 <script setup lang="ts">
 import { ref, watch, onMounted, markRaw } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import Toast from 'primevue/toast';
+
 
 // 导入各个内容组件
 import UserInfo from "@/components/user/UserInfo.vue";
@@ -39,6 +42,8 @@ import LiveBanner from "@/components/user/LiveBanner.vue";
 import { useUserStore } from "@/store/user";
 import axios from "@/API/axios";
 import Transaction from "@/components/user/Transaction.vue";
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
 // 定义导航项类型
 interface Navigation {
   name: string;
@@ -69,7 +74,7 @@ const currentTab = ref(route.params.tab as string);
 const currentView = ref<any>(null);
 const userStore = useUserStore();
 // 根据当前 tab 更新组件
-function updateContent() {
+async function updateContent() {
   const nav = navigations.value.find((item) => item.route === currentTab.value);
   if (nav) {
     currentView.value = nav.component;
@@ -79,8 +84,9 @@ function updateContent() {
     console.warn(`Invalid tab: ${currentTab.value}`);
     router.replace("/userinfo/info");
   }
+  await get_unread_notice();
 }
-
+const noticeAble = ref(false);
 // 初始化时加载内容
 onMounted(() => {
   updateContent();
@@ -94,6 +100,17 @@ watch(
     updateContent();
   }
 );
+
+//尝试读取未读的通知
+const notices = ref<any[]>([]);
+const get_unread_notice = async () =>{
+  const response = await axios.get('/livehome/get_unread_notifications');
+  // console.log(response.data);
+  notices.value = response.data.data;
+  notices.value.forEach((notice:any)=>{
+    toast.add({severity:'info', summary: '未读通知', detail: notice.content, life: 3000});
+  })
+}
 
 // 点击导航时跳转到对应路由
 function navigateTo(routeName: string) {

@@ -15,14 +15,14 @@
           />
         </div>
         <div class="px-3 pb-3 space-y-3">
-          <div v-for="gift in gifts" :key="gift.id" class="flex items-center gap-3">
-            <img :src="gift.avatar" alt="用户头像" class="w-8 h-8 rounded-full" />
+          <div v-for="gift in props.giftRank as giftRankType[]" :key="gift.username" class="flex items-center gap-3">
+            <img :src="`${apiBaseUrl}/${gift.avatar}`" alt="用户头像" class="w-8 h-8 rounded-full" />
             <div class="flex-1">
               <div class="flex items-center justify-between">
                 <span class="text-sm text-white">{{ gift.username }}</span>
-                <span class="text-xs text-pink-500">{{ gift.giftName }}</span>
+                <span class="text-sm text-[#f6339a] font-bold">贡献值：{{ gift.amount }}</span>
               </div>
-              <div class="text-xs text-gray-400">贡献值: {{ gift.contribution }}</div>
+              <!-- <div class="text-xs text-gray-400">贡献值: {{ gift.amount }}</div> -->
             </div>
           </div>
         </div>
@@ -82,6 +82,7 @@
   
   <script setup lang="ts">
   import { ref, onMounted,defineEmits,watch } from 'vue'
+  import { giftRankType } from '@/API/transaction/types';
   const emit = defineEmits(['sendMessage'])
 
   interface Gift {
@@ -109,6 +110,10 @@
     userInfo:Object,
     socketService:Object,
     messages:{
+      type:Array,
+      default:()=>[]
+    },
+    giftRank:{
       type:Array,
       default:()=>[]
     }

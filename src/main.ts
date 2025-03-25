@@ -7,7 +7,18 @@ import 'primeicons/primeicons.css';
 import ToastService from 'primevue/toastservice';
 import ConfirmationService from 'primevue/confirmationservice';
 import { createPinia } from 'pinia';
+import Aura from "@primevue/themes/aura";
 const pinia = createPinia();
 
 
-createApp(App).use(router).use(PrimeVue).use(pinia).mount("#app");
+
+const app = createApp(App)
+app.use(router).use(PrimeVue,{
+    theme:{
+        preset: Aura,
+        options: {
+            darkModeSelector: '.my-app-dark',
+        }
+
+    }
+}).use(pinia).use(ToastService).mount("#app");

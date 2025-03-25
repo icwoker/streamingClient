@@ -49,6 +49,7 @@
                 <button 
                   @click="setAsModerator(fan)"
                   v-if="!fan.is_live_moderator"
+                  :disabled="fan.is_live_banned"
                   class="px-3 py-1.5 border cursor-pointer border-green-500 text-green-500 rounded text-sm hover:bg-green-50 transition-colors"
                   title="设为房管"
                 >
@@ -67,6 +68,7 @@
                   class="px-3 py-1.5 border cursor-pointer border-red-500 text-red-500 rounded text-sm hover:bg-red-50 transition-colors"
                   title="拉黑"
                   v-if="!fan.is_live_banned"
+                  :disabled="fan.is_live_moderator"
                 >
                   拉黑
                 </button>

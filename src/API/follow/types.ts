@@ -8,6 +8,8 @@ export interface followerType{
   'name': string,
   'avatar_url': string,
   'bio': string,
+  'is_live':boolean,
+  'live_id':string,
   'follow_time': string,
 }
 

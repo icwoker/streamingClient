@@ -19,7 +19,7 @@
             </div>
             <div class="live-sider">
                 <liveSider :userInfo="userInfo" @sendMessage="sendMessage" :socketService="socketService"
-                    :messages="messages" />
+                    :messages="messages" :giftRank="giftRank" />
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@ import type { RechargeResult } from '@/API/transaction/types';
 import { useUserStore } from '@/store/user'
 import { sendGift } from '@/API/transaction';
 import { getChatMessage } from '@/API/chatMessage';
-
+import { getGiftRank } from '@/API/transaction';
 const userStore = useUserStore();
 
 const userInfo = ref({});
@@ -51,7 +51,7 @@ const id = route.params.id as string;
 const liverId = ref('');
 const danmakuNewMessage = ref('');
 const giftController = ref(null);
-
+const giftRank = ref([]);
 
 const sendMessage = (message: string) => {
     socketService.sendDanmu(message, new Date().toISOString())
@@ -108,6 +108,8 @@ const sendGifts = async (gift: Gift) => {
                 console.log('发送礼物失败', error);
             }
             console.log('老子要发送礼物了！！！');
+            //更新余额
+            userStore.setBalance(userStore.balance - gift.money);
         } else {
             alert("送礼物失败，请重试");
         }
@@ -140,6 +142,9 @@ onMounted(async () => {
     socketService.connect(userId, id)
     const old_messages = await getChatMessage(id);
     messages.value = old_messages.data.data;
+    //获取礼物的排行榜
+    const giftRankResponse = await getGiftRank(id);
+    giftRank.value = giftRankResponse.data;
     //监听接收到的弹幕消息
     socketService.onReceiveDanmu((data) => {
         const newMessage = data.message;
@@ -147,7 +152,7 @@ onMounted(async () => {
         danmakuNewMessage.value = newMessage.content;
     });
     // 接收礼物的 socket 回调
-    socketService.onReceiveGift((data) => {
+    socketService.onReceiveGift(async (data) => {
                     console.log("收到礼物：", data);
                     const gift = giftController.value.getGifByTitle(data.giftName);
                     if (data.giftName === gift.title) {
@@ -158,11 +163,15 @@ onMounted(async () => {
                         giftTime.value = gift.time;
                         startPosition.value = gift.start_position;
                         
+                        //收到礼物回调后再获取一次礼物排行榜
+                        const giftRankResponse = await getGiftRank(id);
+                        giftRank.value = giftRankResponse.data;
                         // 设置定时器，控制特效结束
                         setTimeout(() => {
                             isEffect.value = false;
                         }, gift.time * 1000);
                     }
+    
                 });
 })
 </script>

@@ -61,3 +61,14 @@ export const getTransactionList = async(page:number,page_size:number)=>{
         throw error;
     }
 }
+
+
+//查询礼物排行榜
+export const getGiftRank = async(live_id:string)=>{
+    const response = await axios.get('/transaction/gift_ranking',{
+        params:{
+            live_id:live_id
+        }
+    })
+    return response.data;
+}

@@ -1,68 +1,126 @@
 <template>
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="text-2xl font-bold mb-6 text-[#2b7fff]">我的关注</h1>
-    
-    <!-- 关注列表 -->
-    <div v-if="loading" class="flex justify-center py-10">
-      <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#2b7fff]"></div>
-    </div>
-    
-    <div v-else-if="follows.length === 0" class="text-center py-10 text-gray-500">
-      您还没有关注任何用户
-    </div>
-    
-    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div v-for="user in follows" :key="user.id" class="bg-white border-none rounded-lg p-4 flex items-start gap-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-        <img :src="`${apiBaseUrl}/${user.avatar_url}`" :alt="user.name" class="w-16 h-16 rounded-full object-cover border-2 border-[#2b7fff] hover:scale-105 transition-transform duration-200">
+  <div class="container mx-auto px-4 py-8 max-w-5xl">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <!-- 标题 -->
+      <h1 class="text-2xl font-bold text-gray-800 mb-6">我的关注</h1>
+      
+      <!-- 加载中状态 -->
+      <div v-if="loading" class="flex justify-center items-center py-20">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#2b7fff]"></div>
+      </div>
+      
+      <!-- 空状态 -->
+      <div v-else-if="follows.length === 0" class="text-center py-16">
+        <p class="text-gray-500 text-lg">暂无关注的用户</p>
+      </div>
+      
+      <!-- 关注列表 -->
+      <div v-else>
+        <!-- 关注用户卡片列表 -->
+        <div class="space-y-4">
+          <div v-for="user in follows" :key="user.id" 
+               class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+            <!-- 用户信息 -->
+            <div class="flex items-center space-x-4">
+              <!-- 头像 -->
+              <div class="relative">
+                <img :src="`${apiBaseUrl}/${user.avatar_url}`" 
+                     :alt="user.name"
+                     class="w-14 h-14 rounded-full object-cover border-2 border-gray-200">
+                <!-- 直播状态标记 -->
+                <span v-if="user.is_live" 
+                      class="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                  直播中
+                </span>
+              </div>
+              
+              <!-- 用户详情 -->
+              <div>
+                <h3 class="font-medium text-lg">{{ user.name }}</h3>
+                <p class="text-gray-500 text-sm line-clamp-1">{{ user.bio || '这个人很懒，什么都没留下' }}</p>
+                <p class="text-gray-400 text-xs mt-1">关注时间: {{ formatDate(user.follow_time) }}</p>
+              </div>
+            </div>
+            
+            <!-- 操作按钮 -->
+            <div class="flex items-center gap-3">
+              <!-- 进入直播间按钮 -->
+              <router-link 
+                v-if="user.is_live" 
+                :to="`/live/${user.live_id}`"
+                class="px-4 py-2 bg-[#2b7fff] hover:bg-blue-600 text-white rounded-md text-sm transition-colors">
+                进入直播间
+              </router-link>
+              
+              <!-- 取消关注按钮 -->
+              <button 
+                @click="handleUnfollow(user.id)" 
+                :disabled="unfollowingId === user.id"
+                class="px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-100 transition-colors flex items-center">
+                <span v-if="unfollowingId === user.id" class="inline-block animate-spin mr-1">↻</span>
+                {{ unfollowingId === user.id ? '取消中...' : '取消关注' }}
+              </button>
+            </div>
+          </div>
+        </div>
         
-        <div class="flex-1">
-          <div class="flex justify-between items-start">
-            <h3 class="font-semibold text-lg text-[#2b7fff]">{{ user.name }}</h3>
+        <!-- 分页 -->
+        <div class="flex justify-between items-center mt-8">
+          <!-- 总计信息 -->
+          <div class="text-sm text-gray-500">
+            共 {{ totalItems }} 个关注，第 {{ currentPage }}/{{ totalPages }} 页
+          </div>
+          
+          <!-- 分页控件 -->
+          <div class="flex items-center space-x-1">
+            <!-- 首页按钮 -->
             <button 
-              @click="handleUnfollow(user.id)" 
-              class="text-sm px-2 py-1.5 rounded-full bg-white border-1 border-[#2b7fff] text-[#2b7fff]  hover:bg-[#2b7fff] hover:text-white transition-all duration-300"
-              :disabled="unfollowingId === user.id"
-            >
-              {{ unfollowingId === user.id ? '处理中...' : '取消关注' }}
+              @click="changePage(1)" 
+              :disabled="currentPage === 1"
+              class="px-3 py-1 rounded-md text-sm"
+              :class="currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'text-[#2b7fff] hover:bg-blue-50'">
+              首页
+            </button>
+            
+            <!-- 上一页按钮 -->
+            <button 
+              @click="changePage(currentPage - 1)" 
+              :disabled="currentPage === 1"
+              class="px-3 py-1 rounded-md text-sm"
+              :class="currentPage === 1 ? 'text-gray-400 cursor-not-allowed' : 'text-[#2b7fff] hover:bg-blue-50'">
+              上一页
+            </button>
+            
+            <!-- 页码按钮 -->
+            <template v-for="page in displayedPages" :key="page">
+              <button 
+                @click="changePage(page)" 
+                class="px-3 py-1 rounded-md text-sm"
+                :class="currentPage === page ? 'bg-[#2b7fff] text-white' : 'text-gray-700 hover:bg-blue-50'">
+                {{ page }}
+              </button>
+            </template>
+            
+            <!-- 下一页按钮 -->
+            <button 
+              @click="changePage(currentPage + 1)" 
+              :disabled="currentPage === totalPages"
+              class="px-3 py-1 rounded-md text-sm"
+              :class="currentPage === totalPages ? 'text-gray-400 cursor-not-allowed' : 'text-[#2b7fff] hover:bg-blue-50'">
+              下一页
+            </button>
+            
+            <!-- 末页按钮 -->
+            <button 
+              @click="changePage(totalPages)" 
+              :disabled="currentPage === totalPages"
+              class="px-3 py-1 rounded-md text-sm"
+              :class="currentPage === totalPages ? 'text-gray-400 cursor-not-allowed' : 'text-[#2b7fff] hover:bg-blue-50'">
+              末页
             </button>
           </div>
-          <p class="text-sm text-gray-600 mt-2 line-clamp-2">{{ user.bio || '这个人很懒，什么都没留下' }}</p>
-          <p class="text-xs text-gray-400 mt-2">关注于: {{ formatDate(user.follow_time) }}</p>
         </div>
       </div>
-    </div>
-    
-    <!-- 分页控件 -->
-    <div v-if="totalPages > 0" class="flex justify-center mt-8 gap-3">
-      <button 
-        @click="changePage(currentPage - 1)" 
-        :disabled="currentPage === 1"
-        class="px-4 py-2 rounded-full border-2 border-[#2b7fff] text-[#2b7fff] hover:bg-[#2b7fff] hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        上一页
-      </button>
-      
-      <button 
-        v-for="page in displayedPages" 
-        :key="page" 
-        @click="changePage(page)"
-        :class="[
-          'px-4 py-2 rounded-full border-2 transition-all duration-300', 
-          currentPage === page 
-            ? 'bg-[#2b7fff] text-white border-[#2b7fff]' 
-            : 'border-[#2b7fff] text-[#2b7fff] hover:bg-[#2b7fff] hover:text-white'
-        ]"
-      >
-        {{ page }}
-      </button>
-      
-      <button 
-        @click="changePage(currentPage + 1)" 
-        :disabled="currentPage === totalPages"
-        class="px-4 py-2 rounded-full border-2 border-[#2b7fff] text-[#2b7fff] hover:bg-[#2b7fff] hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        下一页
-      </button>
     </div>
   </div>
 </template>

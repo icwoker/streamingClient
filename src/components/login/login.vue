@@ -52,6 +52,7 @@ async function NewLogin(){
     console.log(reJson);
     router.push("/userinfo");
   } catch (error) {
+    alert("登录失败，请检查用户名和密码是否正确");
     console.log("登录失败了",error);
   }
 }

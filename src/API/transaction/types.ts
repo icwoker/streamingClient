@@ -21,3 +21,9 @@ export interface TransactionList{
     page:number;
     page_size:number;
 }
+
+export interface giftRankType{
+    username:string;
+    avatar:string;
+    amount:number;
+}

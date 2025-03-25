@@ -71,13 +71,13 @@
               <i class="pi pi-video mr-2"></i>直播中心
             </a>
             <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-200">
-              <i class="pi pi-user mr-2"></i>我的直播间
+              <i class="pi pi-user mr-2"></i>粉丝中心
             </a>
             <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-200">
               <i class="pi pi-trophy mr-2"></i>我的关注
             </a>
             <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-200">
-              <i class="pi pi-envelope mr-2"></i>粉丝中心
+              <i class="pi pi-envelope mr-2"></i>我的消息
             </a>
             <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-200">
               <i class="pi pi-home mr-2"></i>小黑屋
@@ -126,7 +126,7 @@ function routeTo(path:string){
   if(path === "home"){
     router.push("/");
   }else{
-    router.push(`/home#${path}`);
+    router.push(`/home?tag=${path}`);
   }
 }
 

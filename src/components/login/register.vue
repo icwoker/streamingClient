@@ -77,6 +77,9 @@ async function register() {
     });
     const resJson = await res.json();
     console.log(resJson);
+    if(resJson){
+      alert('注册成功,请切换到登录页面登录')
+    }
   } else {
     alert("抱歉，验证码错误");
   }
