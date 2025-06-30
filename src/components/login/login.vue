@@ -1,7 +1,6 @@
 <template>
   <div class="login-container">
     <h2>登录</h2>
-
     <input type="text" placeholder="用户名" v-model="username" />
     <input type="password" placeholder="密码" v-model="password" />
     <button type="submit" @click="NewLogin">登录</button>
@@ -42,18 +41,18 @@ async function login() {
   console.log(resJson);
 }
 
-async function NewLogin(){
-  try{
-    const res_1 = await axios.post('/auth/login',{
-      username:username.value,
-      password:password.value,
+async function NewLogin() {
+  try {
+    const res_1 = await axios.post("/auth/login", {
+      username: username.value,
+      password: password.value,
     });
     const reJson = res_1.data;
     console.log(reJson);
     router.push("/userinfo");
   } catch (error) {
     alert("登录失败，请检查用户名和密码是否正确");
-    console.log("登录失败了",error);
+    console.log("登录失败了", error);
   }
 }
 </script>

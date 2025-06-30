@@ -52,6 +52,11 @@ async function register() {
     confirmPassword: confirmPassword.value,
     code: code.value,
   };
+  if (username.value.length > 20 || password.value.length > 20) {
+    alert("用户名或密码长度不能超过20个字符");
+    return;
+  }
+
   if (obj.password !== obj.confirmPassword) {
     alert("两次密码不一致");
     return;
@@ -77,8 +82,8 @@ async function register() {
     });
     const resJson = await res.json();
     console.log(resJson);
-    if(resJson){
-      alert('注册成功,请切换到登录页面登录')
+    if (resJson) {
+      alert("注册成功,请切换到登录页面登录");
     }
   } else {
     alert("抱歉，验证码错误");
